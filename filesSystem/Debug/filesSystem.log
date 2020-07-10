@@ -1,0 +1,3 @@
+﻿  main.cpp
+D:\VS_Project\filesSystem\filesSystem\Head\define.h(76,2): warning C4091: “typedef ”: 没有声明变量时忽略“group”的左侧
+  filesSystem.vcxproj -> D:\VS_Project\filesSystem\Debug\filesSystem.exe

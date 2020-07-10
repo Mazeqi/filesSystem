@@ -14,4 +14,41 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Head\fileSys.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\util.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\command.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\define.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="model\util.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="run\main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="model\fileSys.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="model\command.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Head\blockDao.h">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="model\blockDao.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config\user.ini" />
+  </ItemGroup>
 </Project>
