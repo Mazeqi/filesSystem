@@ -40,7 +40,16 @@ public:
 
 	void saveConfig();
 
-	void mkDir(string param1, string param2, char type);
+	void mkDir(string param1, string filename, char type);
+
+	struct fcb *openFile(string fileName);
+
+	void fileStart(struct fcb* f);
+
+	void cd(string fileName);
+
+	void del(string fileName);
+
 
 private:
 

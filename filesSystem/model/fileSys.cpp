@@ -12,6 +12,7 @@ fileSys::fileSys() {
 	curUser.username = "";
 	curUser.passwd = "";
 	memset(blockMap, '0', blockMap_Len - 1);
+	curDir = NULL;
 	
 }
 
@@ -58,10 +59,11 @@ void fileSys::initFcb() {
 	//读取该用户的fcb表
 	if (!utSys.is_emptyFile(blUt.getFcbFile() + to_string(curUser.uid))) {
 		fcbMap = blUt.readFcb(blUt.getFcbFile() + to_string(curUser.uid));
+		dirMap = blUt.readFcbMap(blUt.getFcbMapFile() + to_string(curUser.uid));
 		curDir = &fcbMap[0];
 	}
 	else {
-		fcbMap[0].fileName = "root";
+		fcbMap[0].fileName = "..";
 		fcbMap[0].inode = 0;
 		fcbMap[0].attribute = 'd';
 		fcbMap[0].uid = curUser.uid;
@@ -78,9 +80,9 @@ void fileSys::initFcb() {
 		dirMap[0] = dirVec;
 	}
 
-	if (!utSys.is_emptyFile(blUt.getFcbMapFile() + to_string(curUser.uid))) {
-		dirMap = blUt.readFcbMap(blUt.getFcbMapFile() + to_string(curUser.uid));
-	}
+	/*if (!utSys.is_emptyFile(blUt.getFcbMapFile() + to_string(curUser.uid))) {
+		
+	}*/
 }
 
 void fileSys::start(){
@@ -89,7 +91,7 @@ void fileSys::start(){
 		char buf[1024];
 		memset(buf, 0, 1024);
 		fflush(stdin);
-		cout << "Please input your command ! \n";
+		//cout << "Please input your command ! \n";
 		pwd();
 		cout << ">> ";
 		cin.getline(buf, 1024);
@@ -112,6 +114,22 @@ void fileSys::start(){
 			}
 			case MKDIR: {
 				mkDir(strVec[1], strVec[2], 'd');
+				break;
+			}
+
+			case OPEN: {
+				struct fcb* f = openFile(strVec[1]);
+				if (f == NULL) {
+					cout << "Can not open the file! \n";
+				}
+				else {
+					fileStart(f);
+				}
+				break;
+			}
+
+			case CD: {
+				cd(strVec[1]);
 				break;
 			}
 
@@ -180,15 +198,12 @@ void fileSys::mkDir(string param1, string filename, char type){
 		}
 	}
 
-	
-
 	struct fcb nfcb;
 
 	nfcb.inode = index;
-	
 	nfcb.uid = curUser.uid;
 	nfcb.gid = curUser.gid;
-
+	nfcb.lifeFlag = 1;
 	nfcb.time = utSys.get_cur_time();
 	nfcb.fileSize = 0;
 
@@ -219,6 +234,105 @@ void fileSys::mkDir(string param1, string filename, char type){
 
 }
 
+fcb* fileSys::openFile(string fileName)
+{
+	if (!is_file_in_curDir(fileName, 'f')) {
+		cout << "The file can not find in cur dir! \n";
+		return NULL;
+	}
+
+	vector<string> strVec;
+	utSys.fileParse(fileName, strVec);
+
+	vector<int> iVec = dirMap[curDir->inode];
+	for (int i = 1; i < iVec.size(); i++) {
+		if (fcbMap[iVec[i]].fileName == strVec[0] && fcbMap[iVec[i]].exName == strVec[1]) {
+			return &fcbMap[iVec[i]];
+		}
+	}
+
+	return NULL;
+}
+
+void fileSys::fileStart(fcb* f)
+{
+	while (1) {
+
+		char buf[1024];
+		memset(buf, 0, 1024);
+		fflush(stdin);
+		//cout << "Please input your command ! \n";
+		//pwd();
+		cout << f->fileName << "." << f->exName << ">";
+		cin.getline(buf, 1024);
+
+		string command = string(buf);
+
+		vector<string> strVec;
+		CMD Swit = utSys.commandParse(strVec, command);
+		switch (Swit) {
+
+			case READ: {
+				if (auth('r', f)) {
+					blUt.readBlock(f);
+				}
+				else {
+					cout << "No access to read the file ! \n";
+				}
+				break;
+			}
+			
+			case WRITE: {
+				if (auth('w', f)) {
+					char buffer[512];
+					strcpy(buffer, strVec[1].c_str());
+					blUt.writeBlock(blockMap, f, buffer);
+				}
+				else {
+					cout << "No access to write the file ! \n";
+				}
+				break;
+			}
+			case CLOSE: {
+				f = NULL;
+				return;
+			}
+
+			default: {
+				cout << "unknown command! \n";
+				break;
+			}
+		}
+		
+	}
+	
+}
+
+void fileSys::cd(string fileName){
+	if (fileName == ".") {
+		return;
+	}
+
+	vector<int> iVec = dirMap[curDir->inode];
+	if (fileName == "..") {
+		curDir = &fcbMap[iVec[0]];
+		return;
+	}
+
+	 if (!is_file_in_curDir(fileName, 'd')) {
+		cout << "can not find the dir !\n";
+		return;
+	 }
+
+	
+	for (int i = 1; i < iVec.size(); i++) {
+		if (fcbMap[iVec[i]].fileName == fileName && fcbMap[iVec[i]].attribute == 'd') {
+			curDir = &fcbMap[iVec[i]];
+			break;
+		}
+	}
+}
+
 bool fileSys::is_file_in_curDir(string fileName, char type)
 {
 	vector<int> dirVec;
@@ -229,14 +343,14 @@ bool fileSys::is_file_in_curDir(string fileName, char type)
 	dirVec = dirMap[curDir->inode];
 	if (strVec.size() == 1) {
 		for (int i = 1; i < dirVec.size(); i++) {
-			if (fcbMap[dirVec[i]].fileName == fileName && type == 'd') {
+			if (fcbMap[dirVec[i]].fileName == fileName && type == 'd' && fcbMap[dirVec[i]].lifeFlag == 1) {
 				return true;
 			}
 		}
 	}
 	else if (strVec.size() == 2) {
 		for (int i = 1; i < dirVec.size(); i++) {
-			if (fcbMap[dirVec[i]].fileName == strVec[0] && fcbMap[dirVec[i]].exName == strVec[1] && type == 'f') {
+			if (fcbMap[dirVec[i]].fileName == strVec[0] && fcbMap[dirVec[i]].exName == strVec[1] && type == 'f' && fcbMap[dirVec[i]].lifeFlag == 1) {
 				return true;
 			}
 		}
@@ -321,7 +435,7 @@ void fileSys::dir(){
 }
 void fileSys::fcb_disp(){
 	vector<int> nodeVec = dirMap[curDir->inode];
-	//cout << "Current Dir:" << curDir->fileName  << endl;
+	cout << "Current Dir:" << curDir->fileName  << endl;
 	for (int i = 0; i < nodeVec.size(); i++) {
 
 		string sMon; 
@@ -363,7 +477,14 @@ void fileSys::fcb_disp(){
 		else {
 			cout << "<FILE> \t";
 		}
-		cout << fcbMap[i].fileName << endl ;
+
+		if (fcbMap[i].attribute == 'd') {
+			cout << fcbMap[i].fileName << endl;
+		}
+		else {
+			cout << fcbMap[i].fileName <<"." << fcbMap[i].exName << endl;
+		}
+		
 	}
 	
 

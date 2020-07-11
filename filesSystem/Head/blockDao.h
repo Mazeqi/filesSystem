@@ -61,6 +61,10 @@ public:
 	void writeFcbMap(string fcbMapPath, map<int, vector<int>> fcbMap);
 
 	map<int, vector<int>> readFcbMap(string fcbMapPath);
+
+	void readReal(int num);
+
+	void readBlock(struct fcb *file);
 };
 
 #endif

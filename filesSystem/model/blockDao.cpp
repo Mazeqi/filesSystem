@@ -498,3 +498,41 @@ map<int, vector<int>> blockD::readFcbMap(string fcbMapPath)
 	fin.close();
 	return dirMap;
 }
+
+void blockD::readReal(int num)
+{
+	
+	FILE* f = fopen(blockFile.c_str(), "r");
+	char ch, * str;
+	str = (char*)malloc(512);
+	memset(str, 0, 512);
+	int i = 0;
+	
+	//将文件指针置在文件开头
+	fseek(f, 0, SEEK_SET); 
+
+	//将文件指针偏转到对应物理块开头
+	fseek(f, (num - 1) * 512, SEEK_CUR);
+	ch = fgetc(f);
+	while (ch != 0) {
+		str[i] = ch;
+		ch = fgetc(f);
+		i++;
+	}
+	printf("%s", str);
+	
+}
+
+void blockD::readBlock(fcb* file)
+{
+	int i;
+	for (i = 0; i < File_Len; i++) {
+		if (file->blockVec[i]) {
+			readReal(file->blockVec[i]);
+		}
+		else {
+			break;
+		}
+	}
+	printf("\n");
+}
