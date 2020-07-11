@@ -48,6 +48,8 @@ public:
 	map<int, fcb> readFcb(string fcbPath);
 
 	void writeFcb(string fcbPath, map<int, fcb> fcbMap);
+
+	void writeBlockMap(char* blcokMap);
 };
 
 #endif

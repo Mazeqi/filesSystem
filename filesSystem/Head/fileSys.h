@@ -12,12 +12,31 @@ using namespace std;
 
 class fileSys {
 public:
+
+
 	fileSys();
 
 	void running();
 
 	//初始化所有文件
 	void init();
+
+	bool is_file_in_curDir(int inode);
+
+	void initFcb();
+
+	void start();
+
+	//cmd
+	bool login(string username, string password);
+
+	void dir();
+
+	bool auth(char op, struct fcb *file);
+
+	void fcb_disp();
+
+	void pwd();
 
 private:
 
@@ -48,6 +67,8 @@ private:
 	//组别
 	vector<group> gVec;
 
+	//当前dir的id
+	struct fcb *curDir;
 
 };
 

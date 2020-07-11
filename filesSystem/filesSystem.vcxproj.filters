@@ -21,9 +21,6 @@
     <ClInclude Include="Head\util.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Head\command.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Head\define.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -36,9 +33,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="model\fileSys.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="model\command.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Head\blockDao.h">

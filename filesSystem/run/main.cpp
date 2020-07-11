@@ -2,6 +2,8 @@
 #include<iostream>
 #include<fstream>
 #include<vector>
+#include<string.h>
+#include<cstdio>
 using namespace std;
 
 int main() {
@@ -25,16 +27,27 @@ int main() {
 	
 	bt.initBlock(map);
 	cout << map<< endl;*/
-	ofstream fout("config/fcb", ios::out);
-	char str[30] = {0};
-	for (int i = 0; i < 10; i++) {
+	/*ofstream fout("config/fcb", ios::out);
+	char str[2048] = {0};
+	for (int i = 0; i < 2046; i++) {
 	
 		str[i] = '1';
 	};
 	fout.write(str, strlen(str));
-	fout.put(':');
+	fout.put('\n');*/
 
+	/*string s = "as // d s /  g ;";
+	string p = "/";
+	util ut;
+	vector<string> sVec;
+	sVec = ut.splitString(s, p);
+	for (int i = 0; i < sVec.size(); i++) {
+		cout << sVec[i] << endl;
+	}*/
 
+	fileSys s;
+	s.running();
+	
 	
 	return 0;
 }

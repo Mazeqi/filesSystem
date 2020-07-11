@@ -1,5 +1,8 @@
 #pragma once
+#ifndef __DEFINE_HEAD__
+#define __DEFINE_HEAD__
 #define _CRT_SECURE_NO_WARNINGS
+
 #include<string>
 #include<vector>
 #include<time.h>
@@ -14,6 +17,22 @@ using namespace std;
 //索引map的长度
 #define indexLen 50
 
+enum CMD {
+	ERR = -2,
+	EXIT = -1,
+	LOGIN = 0,
+	CREATE = 1,
+	OPEN = 2,
+	READ = 3,
+	WRITE = 4,
+	CLOSE = 5,
+	DELETE = 6,
+	MKDIR = 7,
+	CD = 8,
+	DIR = 9,
+	LOGOUT = 10,
+	PWD = 11
+};
 
 typedef struct fcb {
 
@@ -74,3 +93,4 @@ typedef struct group {
 	//用户组的id
 	int gid;
 };
+#endif

@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include"../Head/define.h"
 #include "../Head/blockDao.h"
 #include<fstream>
@@ -192,7 +191,7 @@ map<int, fcb> blockD::readFcb(string fcbPath) {
 			fcbRe.blockVec[i] = atoi(str);
 		}
 		
-		fin.getline(str, 20,';');
+		fin.getline(str, 20);
 		strcpy(fcbRe.access, str);
 
 		fcbRe.lifeFlag = 1;
@@ -296,7 +295,20 @@ void blockD::writeFcb(string fcbPath,map<int, fcb> fcbMap) {
 		memset(str, 0, 30);
 		strcpy(str, fcbSave->second.access);
 		fout.write(str, strlen(str));
-		fout.put(';');
+		fout.put('\n');
+		
+		
 	}
+	fout.close();
+}
+
+void blockD::writeBlockMap(char *blockMap) {
+	ofstream fout(blockFile, ios::app);
+	//将文件指针置在文件开头
+	fout.seekp(0, ios::beg);  
+
+	//写入位示图内容
+	fout.write(blockMap, blockMap_Len - 1);
+	
 	fout.close();
 }

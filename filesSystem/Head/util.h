@@ -22,6 +22,15 @@ public:
 	bool is_emptyFile(string filePath);
 
 	struct tm get_cur_time();
+
+	vector<string> splitString( const string& str, const string &pattern);
+
+	CMD commandParse(vector<string> &strVec, string command);
+
+	void auth_disp(char* access);
+
+	//void fcb_disp(struct fcb *file, int access);
+
 };
 
 #endif

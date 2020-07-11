@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Head\command.h" />
     <ClInclude Include="Head\define.h" />
     <ClInclude Include="Head\fileSys.h" />
     <ClInclude Include="Head\util.h" />
@@ -32,7 +31,6 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <ClCompile Include="model\blockDao.cpp" />
-    <ClCompile Include="model\command.cpp" />
     <ClCompile Include="model\fileSys.cpp" />
     <ClCompile Include="model\util.cpp" />
     <ClCompile Include="run\main.cpp" />
