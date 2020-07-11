@@ -192,3 +192,20 @@ void util::auth_disp(char* access) {
 	}
 	printf("\t");
 }
+
+bool util::fileParse(string fileName, vector<string> &strVec)
+{
+	
+	if (fileName == "") {
+		return false;
+	}
+	fileName += ".";
+	strVec = splitString(fileName, ".");
+	int vecSize = strVec.size();
+	if (vecSize != 2) {
+		return false;
+	}
+
+	
+	return true;
+}

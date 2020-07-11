@@ -17,18 +17,21 @@ private:
 	string indexFile;
 	string groupFile;
 	string fcbFile;
+	string fcbMapFile;
 
 public:
 
 	blockD();
 	//初始化块信息
-	void initBlock(char *blockMap);
+	void initBlockMap(char *blockMap);
 
 	//读取块信息
-	void readBlock(char *blockMap);
+	void readBlockMap(char *blockMap);
 
 	//返回用户的信息
 	vector<user> read_user(string userPath);
+
+	string getFcbMapFile();
 
 	string getBlockFile();
 
@@ -50,6 +53,14 @@ public:
 	void writeFcb(string fcbPath, map<int, fcb> fcbMap);
 
 	void writeBlockMap(char* blcokMap);
+
+	int writeReal(int num, char* str);
+
+	void writeBlock(char* blockMap, struct fcb *file, char *contents);
+
+	void writeFcbMap(string fcbMapPath, map<int, vector<int>> fcbMap);
+
+	map<int, vector<int>> readFcbMap(string fcbMapPath);
 };
 
 #endif

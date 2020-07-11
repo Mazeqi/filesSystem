@@ -13,6 +13,7 @@ using namespace std;
 //存放位视图的大小，2048B用来存放位视图，2049是换行
 #define blockMap_Len 2049
 
+#define getsize(arr) sizeof(arr)/sizeof(&arr[0])
 
 //索引map的长度
 #define indexLen 50

@@ -21,7 +21,7 @@ public:
 	//初始化所有文件
 	void init();
 
-	bool is_file_in_curDir(int inode);
+	bool is_file_in_curDir(string fileName, char type);
 
 	void initFcb();
 
@@ -37,6 +37,10 @@ public:
 	void fcb_disp();
 
 	void pwd();
+
+	void saveConfig();
+
+	void mkDir(string param1, string param2, char type);
 
 private:
 

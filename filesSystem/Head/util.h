@@ -31,6 +31,8 @@ public:
 
 	//void fcb_disp(struct fcb *file, int access);
 
+	bool fileParse(string fileName, vector<string> &strVec);
+
 };
 
 #endif
