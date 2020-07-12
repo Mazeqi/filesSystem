@@ -1,10 +1,14 @@
 ﻿  fileSys.cpp
-D:\VS_Project\filesSystem\filesSystem\Head\define.h(97,2): warning C4091: “typedef ”: 没有声明变量时忽略“group”的左侧
-D:\VS_Project\filesSystem\filesSystem\model\fileSys.cpp(261,20): warning C4018: “<”: 有符号/无符号不匹配
-D:\VS_Project\filesSystem\filesSystem\model\fileSys.cpp(344,20): warning C4018: “<”: 有符号/无符号不匹配
-D:\VS_Project\filesSystem\filesSystem\model\fileSys.cpp(364,20): warning C4018: “<”: 有符号/无符号不匹配
-D:\VS_Project\filesSystem\filesSystem\model\fileSys.cpp(404,21): warning C4018: “<”: 有符号/无符号不匹配
-D:\VS_Project\filesSystem\filesSystem\model\fileSys.cpp(412,21): warning C4018: “<”: 有符号/无符号不匹配
-D:\VS_Project\filesSystem\filesSystem\model\fileSys.cpp(479,20): warning C4018: “<”: 有符号/无符号不匹配
-D:\VS_Project\filesSystem\filesSystem\model\fileSys.cpp(500,20): warning C4018: “<”: 有符号/无符号不匹配
+D:\VS_Project\filesSystem\filesSystem\Head\define.h(98,2): warning C4091: “typedef ”: 没有声明变量时忽略“group”的左侧
+D:\VS_Project\filesSystem\filesSystem\model\fileSys.cpp(278,20): warning C4018: “<”: 有符号/无符号不匹配
+D:\VS_Project\filesSystem\filesSystem\model\fileSys.cpp(361,20): warning C4018: “<”: 有符号/无符号不匹配
+D:\VS_Project\filesSystem\filesSystem\model\fileSys.cpp(384,20): warning C4018: “<”: 有符号/无符号不匹配
+D:\VS_Project\filesSystem\filesSystem\model\fileSys.cpp(427,21): warning C4018: “<”: 有符号/无符号不匹配
+D:\VS_Project\filesSystem\filesSystem\model\fileSys.cpp(448,21): warning C4018: “<”: 有符号/无符号不匹配
+D:\VS_Project\filesSystem\filesSystem\model\fileSys.cpp(456,21): warning C4018: “<”: 有符号/无符号不匹配
+D:\VS_Project\filesSystem\filesSystem\model\fileSys.cpp(523,20): warning C4018: “<”: 有符号/无符号不匹配
+D:\VS_Project\filesSystem\filesSystem\model\fileSys.cpp(544,20): warning C4018: “<”: 有符号/无符号不匹配
+  main.cpp
+D:\VS_Project\filesSystem\filesSystem\Head\define.h(98,2): warning C4091: “typedef ”: 没有声明变量时忽略“group”的左侧
+  正在生成代码...
   filesSystem.vcxproj -> D:\VS_Project\filesSystem\Debug\filesSystem.exe

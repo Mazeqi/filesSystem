@@ -50,7 +50,7 @@ public:
 
 	void del(string fileName);
 
-	void show();
+	void show(int swit);
 
 
 private:

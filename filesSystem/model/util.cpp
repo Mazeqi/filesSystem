@@ -135,8 +135,13 @@ CMD util::commandParse(vector<string>& strVec, string command)
 		if (strVec[0] == "pwd") {
 			return PWD;
 		}
-		if (strVec[0] == "show") {
-			return SHOW;
+
+		if (strVec[0] == "showmap") {
+			return SHOWMAP;
+		}
+
+		if (strVec[0] == "showuser") {
+			return SHOWUSER;
 		}
 	
 		return ERR;

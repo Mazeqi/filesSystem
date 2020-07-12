@@ -132,13 +132,30 @@ void fileSys::start(){
 				cd(strVec[1]);
 				break;
 			}
-
-			case SHOW: {
-				show();
+			
+			case SHOWMAP: {
+				if (curUser.uid == 1) {
+					show(0);
+				}
+				else {
+					cout << "Only Manager Member has this prority ! \n";
+				}
+				
 				break;
 			}
 
-			case EXIT: {
+			case SHOWUSER: {
+				if (curUser.uid == 1) {
+					show(1);
+				}
+				else {
+					cout << "Only Manager Member has this prority ! \n";
+				}
+
+				break;
+			}
+
+			case LOGOUT: {
 				cout << "Bye ! \n";
 				saveConfig();
 				return;
@@ -355,6 +372,9 @@ void fileSys::del(string fileName)
 		cout << "Can not find the file in this dir!\n";
 		return;
 	}
+
+	
+
 	vector<int> fileVec = dirMap[curDir->inode];
 
 	vector<string> strVec;
@@ -367,12 +387,22 @@ void fileSys::del(string fileName)
 		}
 	}
 
+	if (!auth('x', &fcbMap[fileVec[index]])) {
+		cout << "Can not del the file !\n";
+		return;
+	}
+
 	if (index) {
 		fcbMap[fileVec[index]].lifeFlag = 0;
 		dirMap[curDir->inode].erase(dirMap[curDir->inode].begin() + index);
 		//fcbMap.erase(fileVec[index]);
 	}
 
+	for (int i = 0; i < File_Len; i++) {
+		if (fcbMap[fileVec[index]].blockVec[i] > 0) {
+			blockMap[fcbMap[fileVec[index]].blockVec[i] - 1] = '0';
+		}
+	}
 
 }
 
@@ -381,14 +411,28 @@ void fileSys::del(string fileName)
 //	//if(!)
 //}
 
-void fileSys::show()
+void fileSys::show(int swit)
 {
-	for (int i = 0; i < 32; i++) {
-		for (int j = 0; j < 64; j++) {
-			cout << blockMap[i * 32 + j] << " ";
+	if (swit == 0) {
+		for (int i = 0; i < 32; i++) {
+			for (int j = 0; j < 64; j++) {
+				cout << blockMap[i * 32 + j] << " ";
+			}
+			cout << endl << endl;
 		}
-		cout << endl;
 	}
+	
+	if (swit == 1) {
+		cout << "username \t" << "password \t" << "userId \n";
+		for (int i = 0; i < userVec.size(); i++) {
+
+			printf("%-8s\t", userVec[i].username.c_str());
+			printf("%-8s\t", userVec[i].passwd.c_str());
+			printf("%-8d\t", userVec[i].uid);
+			cout << endl;
+		}
+	}
+	
 }
 
 bool fileSys::is_file_in_curDir(string fileName, char type)
