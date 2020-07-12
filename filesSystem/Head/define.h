@@ -32,7 +32,8 @@ enum CMD {
 	CD = 8,
 	DIR = 9,
 	LOGOUT = 10,
-	PWD = 11
+	PWD = 11,
+	SHOW = 12
 };
 
 typedef struct fcb {

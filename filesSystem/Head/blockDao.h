@@ -45,7 +45,7 @@ public:
 
 	string getFcbFile();
 
-	//读取用户组信息
+	//存取数据
 	vector<group> readGroup(string groupPath);
 
 	map<int, fcb> readFcb(string fcbPath);

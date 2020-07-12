@@ -50,6 +50,8 @@ public:
 
 	void del(string fileName);
 
+	void show();
+
 
 private:
 

@@ -133,10 +133,20 @@ void fileSys::start(){
 				break;
 			}
 
+			case SHOW: {
+				show();
+				break;
+			}
+
 			case EXIT: {
 				cout << "Bye ! \n";
 				saveConfig();
 				return;
+			}
+
+			case DELETE: {
+				del(strVec[1]);
+				break;
 			}
 
 			default: {
@@ -226,10 +236,13 @@ void fileSys::mkDir(string param1, string filename, char type){
 
 	vector<int> dirVec;
 	dirVec.push_back(curDir->inode);
+	//cout << curDir->inode << " test\n";
+
 	dirMap[index] = dirVec;
 
-	dirMap[curDir->inode].push_back(index);
-
+	dirVec = dirMap[curDir->inode];
+	dirVec.push_back(index);
+	dirMap[curDir->inode] = dirVec;
 
 
 }
@@ -314,8 +327,11 @@ void fileSys::cd(string fileName){
 	}
 
 	vector<int> iVec = dirMap[curDir->inode];
+	//cout << curDir->inode;
 	if (fileName == "..") {
+		//cout << iVec[0] << "test\n"; 
 		curDir = &fcbMap[iVec[0]];
+		
 		return;
 	}
 
@@ -333,6 +349,48 @@ void fileSys::cd(string fileName){
 	}
 }
 
+void fileSys::del(string fileName)
+{
+	if (!is_file_in_curDir(fileName, 'f')) {
+		cout << "Can not find the file in this dir!\n";
+		return;
+	}
+	vector<int> fileVec = dirMap[curDir->inode];
+
+	vector<string> strVec;
+	utSys.fileParse(fileName, strVec);
+
+	int index = 0;
+	for (int i = 1; i < fileVec.size(); i++) {
+		if (fcbMap[fileVec[i]].fileName == strVec[0] && fcbMap[fileVec[i]].exName == strVec[1]) {
+			index = i;
+		}
+	}
+
+	if (index) {
+		fcbMap[fileVec[index]].lifeFlag = 0;
+		dirMap[curDir->inode].erase(dirMap[curDir->inode].begin() + index);
+		//fcbMap.erase(fileVec[index]);
+	}
+
+
+}
+
+//void fileSys::del(string fileName)
+//{
+//	//if(!)
+//}
+
+void fileSys::show()
+{
+	for (int i = 0; i < 32; i++) {
+		for (int j = 0; j < 64; j++) {
+			cout << blockMap[i * 32 + j] << " ";
+		}
+		cout << endl;
+	}
+}
+
 bool fileSys::is_file_in_curDir(string fileName, char type)
 {
 	vector<int> dirVec;
@@ -341,16 +399,18 @@ bool fileSys::is_file_in_curDir(string fileName, char type)
 	utSys.fileParse(fileName, strVec);
 
 	dirVec = dirMap[curDir->inode];
-	if (strVec.size() == 1) {
+	if (strVec.size() == 1 && type == 'd') {
+		//cout << ".hh" << endl;
 		for (int i = 1; i < dirVec.size(); i++) {
-			if (fcbMap[dirVec[i]].fileName == fileName && type == 'd' && fcbMap[dirVec[i]].lifeFlag == 1) {
+			if (fcbMap[dirVec[i]].fileName == fileName && fcbMap[dirVec[i]].attribute == 'd' && fcbMap[dirVec[i]].lifeFlag == 1) {
+				cout << fcbMap[dirVec[i]].fileName << endl;
 				return true;
 			}
 		}
 	}
-	else if (strVec.size() == 2) {
+	else if (strVec.size() == 2 && type == 'f') {
 		for (int i = 1; i < dirVec.size(); i++) {
-			if (fcbMap[dirVec[i]].fileName == strVec[0] && fcbMap[dirVec[i]].exName == strVec[1] && type == 'f' && fcbMap[dirVec[i]].lifeFlag == 1) {
+			if (fcbMap[dirVec[i]].fileName == strVec[0] && fcbMap[dirVec[i]].exName == strVec[1] && fcbMap[dirVec[i]].attribute == 'f' && fcbMap[dirVec[i]].lifeFlag == 1) {
 				return true;
 			}
 		}
@@ -435,55 +495,65 @@ void fileSys::dir(){
 }
 void fileSys::fcb_disp(){
 	vector<int> nodeVec = dirMap[curDir->inode];
-	cout << "Current Dir:" << curDir->fileName  << endl;
+	//cout << curDir->inode << endl;
+	//cout << "Current Dir:" << curDir->fileName  << endl;
 	for (int i = 0; i < nodeVec.size(); i++) {
 
 		string sMon; 
-		if (fcbMap[i].time.tm_mon < 10) {
+		if (fcbMap[nodeVec[i]].time.tm_mon < 10) {
 			sMon += "0";
 		}
-		sMon += to_string(fcbMap[i].time.tm_mon);
+		sMon += to_string(fcbMap[nodeVec[i]].time.tm_mon);
 
 		string sDay;
-		if (fcbMap[i].time.tm_mday < 10) {
+		if (fcbMap[nodeVec[i]].time.tm_mday < 10) {
 			sDay += "0";
 		}
-		sDay += to_string(fcbMap[i].time.tm_mday);
+		sDay += to_string(fcbMap[nodeVec[i]].time.tm_mday);
 
 		string sHour;
-		if (fcbMap[i].time.tm_hour < 10) {
+		if (fcbMap[nodeVec[i]].time.tm_hour < 10) {
 			sHour += "0";
 		}
-		sHour += to_string(fcbMap[i].time.tm_hour);
+		sHour += to_string(fcbMap[nodeVec[i]].time.tm_hour);
 
 		string sMin;
-		if (fcbMap[i].time.tm_min < 10) {
+		if (fcbMap[nodeVec[i]].time.tm_min < 10) {
 			sMin += "0";
 		}
-		sMin += to_string(fcbMap[i].time.tm_min);
+		sMin += to_string(fcbMap[nodeVec[i]].time.tm_min);
 
 		string sSec;
-		if (fcbMap[i].time.tm_sec < 10) {
+		if (fcbMap[nodeVec[i]].time.tm_sec < 10) {
 			sSec += "0";
 		}
-		sSec += to_string(fcbMap[i].time.tm_sec);
+		sSec += to_string(fcbMap[nodeVec[i]].time.tm_sec);
 
 
-		cout << fcbMap[i].time.tm_year << "/" << sMon << "/" << sDay << "\t";
+		cout << fcbMap[nodeVec[i]].time.tm_year << "/" << sMon << "/" << sDay << "\t";
 		cout <<sHour << ":" << sMin << ":" << sSec <<"\t";
-		if (fcbMap[i].attribute == 'd') {
+		if (fcbMap[nodeVec[i]].attribute == 'd') {
 			cout << "<DIR> \t";
 		}
 		else {
 			cout << "<FILE> \t";
 		}
 
-		if (fcbMap[i].attribute == 'd') {
-			cout << fcbMap[i].fileName << endl;
+		cout << fcbMap[nodeVec[i]].fileSize << "\t";
+
+		if (i == 0) {
+			cout << ".." << endl;
 		}
 		else {
-			cout << fcbMap[i].fileName <<"." << fcbMap[i].exName << endl;
+			if (fcbMap[nodeVec[i]].attribute == 'd') {
+				cout << fcbMap[nodeVec[i]].fileName << endl;
+			}
+			else {
+				cout << fcbMap[nodeVec[i]].fileName << "." << fcbMap[nodeVec[i]].exName << endl;
+			}
 		}
+
+		
 		
 	}
 	
@@ -505,12 +575,17 @@ void fileSys::pwd(){
 	vector<int> nodeVec = dirMap[curDir->inode];
 	int father = nodeVec[0];
 	while (father != 0) {
+		
 		pth += "/";
 		pth += fcbMap[father].fileName;
-
-		vector<int> nodeVec = dirMap[curDir->inode];
-		int father = nodeVec[0];
+		nodeVec = dirMap[father];
+		father = nodeVec[0];
 	}
+	if (curDir->inode) {
+		pth += "/";
+		pth += fcbMap[curDir->inode].fileName;
+	}
+	
 	cout << pth;
 	//}
 }

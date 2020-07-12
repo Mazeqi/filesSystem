@@ -197,10 +197,11 @@ map<int, fcb> blockD::readFcb(string fcbPath) {
 			fcbRe.blockVec[i] = atoi(str);
 		}
 		
-		fin.getline(str, 20);
+		fin.getline(str, 20, ':');
 		strcpy(fcbRe.access, str);
 
-		fcbRe.lifeFlag = 1;
+		fin.getline(str, 20);
+		fcbRe.lifeFlag = atoi(str);
 		fcbMap[fcbRe.inode] = fcbRe;
 
 		ch = fin.get();
@@ -300,6 +301,11 @@ void blockD::writeFcb(string fcbPath,map<int, fcb> fcbMap) {
 		//ÎÄ¼þaccess
 		memset(str, 0, 30);
 		strcpy(str, fcbSave->second.access);
+		fout.write(str, strlen(str));
+		fout.put(':');
+
+		memset(str, 0, 30);
+		sprintf(str,"%d",fcbSave->second.lifeFlag);
 		fout.write(str, strlen(str));
 		fout.put('\n');
 		

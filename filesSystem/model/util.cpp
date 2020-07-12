@@ -135,6 +135,9 @@ CMD util::commandParse(vector<string>& strVec, string command)
 		if (strVec[0] == "pwd") {
 			return PWD;
 		}
+		if (strVec[0] == "show") {
+			return SHOW;
+		}
 	
 		return ERR;
 	}
@@ -199,7 +202,7 @@ bool util::fileParse(string fileName, vector<string> &strVec)
 	if (fileName == "") {
 		return false;
 	}
-	fileName += ".";
+	//fileName += ".";
 	strVec = splitString(fileName, ".");
 	int vecSize = strVec.size();
 	if (vecSize != 2) {
